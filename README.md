@@ -5,7 +5,6 @@ Batuhan Kahya
 
 -   [Welcome](#welcome)
     -   [Assignments](#assignments)
-        -   [API Research](#api-research)
 
 Welcome
 =======
@@ -15,6 +14,6 @@ Hello! This is Batuhan, also known as 'hitchiker' in the class. :thumbsup: I am 
 Assignments
 -----------
 
-#### API Research
+#### [API Research](https://github.com/kahyabatuhan/Open-Notify-API)
 
-In order to familiarize ourselves with Data Exchange Protocols, short research is conduct about commonly available API's.
+In order to familiarize ourselves with Data Exchange Protocols and learn more about APIs, short research is conducted.
