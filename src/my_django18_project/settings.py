@@ -27,6 +27,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'yelikmelik@gmail.com'
+EMAIL_HOST_PASSWORD = 'Gint1616'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
 # Application definition
 
@@ -35,9 +40,12 @@ INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
+    'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'profiles',
+    'crispy_forms',
+    'registration',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -118,3 +126,13 @@ STATICFILES_DIRS = (
     os.path.join(os.path.dirname(BASE_DIR), 'static', 'static'),
     #C:\.virtualenvs\django18_project\static\static
 )
+
+#Crispy FORM TAGs SETTINGS
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
+
+
+#DJANGO REGISTRATION REDUX SETTINGS
+ACCOUNT_ACTIVATION_DAYS = 7
+REGISTRATION_AUTO_LOGIN = True
+SITE_ID = 1
+LOGIN_REDIRECT_URL = '/'
