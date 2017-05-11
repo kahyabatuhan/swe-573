@@ -14,6 +14,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 import os
 from settings_secret import *
 
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 #C:\.virtualenvs\django18_project\src
 
@@ -43,6 +44,7 @@ INSTALLED_APPS = (
     'profiles',
     'crispy_forms',
     'registration',
+    'storages',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -133,3 +135,4 @@ ACCOUNT_ACTIVATION_DAYS = 7
 REGISTRATION_AUTO_LOGIN = True
 SITE_ID = 1
 LOGIN_REDIRECT_URL = '/'
+
