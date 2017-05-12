@@ -125,14 +125,15 @@ WSGI_APPLICATION = 'my_django18_project.wsgi.application'
 #        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 #    }
 #}
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'django_db',
-        'USER': 'localuser',
-        'PASSWORD': 'local007',
-    }
-}
+
+# DATABASES = {
+    # 'default': {
+        # 'ENGINE': 'django.db.backends.mysql',
+        # 'NAME': 'django_db',
+        # 'USER': 'localuser',
+        # 'PASSWORD': 'local007',
+    # }
+# }
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
