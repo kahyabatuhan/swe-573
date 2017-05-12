@@ -151,17 +151,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
-MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static', 'media')
-#C:\.virtualenvs\django18_project\static\media
-
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static', 'root')
-#C:\.virtualenvs\django18_project\static\root
-STATICFILES_DIRS = (
-    os.path.join(os.path.dirname(BASE_DIR), 'static', 'static'),
-    #C:\.virtualenvs\django18_project\static\static
-)
+# MEDIA_URL = "/media/"
+# MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static', 'media')
+# #C:\.virtualenvs\django18_project\static\media
+# 
+# STATIC_URL = '/static/'
+# STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static', 'root')
+# #C:\.virtualenvs\django18_project\static\root
+# STATICFILES_DIRS = (
+    # os.path.join(os.path.dirname(BASE_DIR), 'static', 'static'),
+    # #C:\.virtualenvs\django18_project\static\static
+# )
 
 #Crispy FORM TAGs SETTINGS
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
