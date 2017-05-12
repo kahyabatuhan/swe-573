@@ -14,6 +14,9 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "my_django18_project.settings")
 from django.core.wsgi import get_wsgi_application
 from django.conf import settings
 
+import os
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "my_django18_project.settings")
+
 application = get_wsgi_application()
 
 if not settings.DEBUG:
