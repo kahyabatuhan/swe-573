@@ -1,0 +1,1 @@
+web: gunicorn my_django18_project.wsgi
