@@ -12,7 +12,34 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-from settings_secret import *
+#from settings_secret import *
+import datetime
+
+#email credentials
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'yelikmelik@gmail.com'
+EMAIL_HOST_PASSWORD = 'password'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+#amazonS3 credentials
+access_key = 'AKIAIHGCFKJOW4FA7UUQ'
+secret_key = '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'
+AWS_ACCESS_KEY_ID = access_key
+AWS_SECRET_ACCESS_KEY = secret_key
+AWS_STORAGE_BUCKET_NAME = 'tawamazon'
+STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+S3_URL = '//%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
+MEDIA_URL = S3_URL + 'media/'
+STATIC_URL = S3_URL + 'static/'
+ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
+date_two_months_later = datetime.date.today() + datetime.timedelta(2 * 365 / 12)
+expires = date_two_months_later.strftime('%A, %d %B %Y 20:00:00 GMT')
+AWS_HEADERS = {
+    'Expires': expires,
+    'Cache-Control': 'max-age=86400',
+}
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -27,7 +54,16 @@ SECRET_KEY = '3xzhjkgr@l!db8iuq%n8l)o8+dx6z-4mo3fb-lf7!(63mpm$ky'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+import dj_database_url
+# Update database configuration with $DATABASE_URL.
+DATABASES['default'] =  dj_database_url.config(conn_max_age=500)
+
+# Honor the 'X-Forwarded-Proto' header for request.is_secure()
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Allow all host headers
+ALLOWED_HOSTS = ['*']
+
 
 #Mail credentials imported from settings_secret
 
