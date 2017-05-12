@@ -54,16 +54,7 @@ SECRET_KEY = '3xzhjkgr@l!db8iuq%n8l)o8+dx6z-4mo3fb-lf7!(63mpm$ky'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-import dj_database_url
-# Update database configuration with $DATABASE_URL.
-#DATABASES['default'] =  dj_database_url.config()
-DATABASES = { 'default': dj_database_url.config() }
 
-# Honor the 'X-Forwarded-Proto' header for request.is_secure()
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
-# Allow all host headers
-ALLOWED_HOSTS = ['*']
 
 
 #Mail credentials imported from settings_secret
@@ -126,14 +117,14 @@ WSGI_APPLICATION = 'my_django18_project.wsgi.application'
 #    }
 #}
 
-# DATABASES = {
-    # 'default': {
-        # 'ENGINE': 'django.db.backends.mysql',
-        # 'NAME': 'django_db',
-        # 'USER': 'localuser',
-        # 'PASSWORD': 'local007',
-    # }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'django_db',
+        'USER': 'localuser',
+        'PASSWORD': 'local007',
+    }
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
@@ -164,12 +155,26 @@ USE_TZ = True
     # #C:\.virtualenvs\django18_project\static\static
 # )
 
-STATIC_ROOT = 'staticfiles'
-MEDIA_ROOT = 'mediafiles'
-STATICFILES_DIRS = (
-  os.path.join(BASE_DIR, 'static'),
-  #C:\.virtualenvs\django18_project\static\static
-)
+if not DEBUG:
+    try:
+        import dj_database_url
+    except:
+        pass
+    # Update database configuration with $DATABASE_URL.
+    #DATABASES['default'] =  dj_database_url.config()
+    DATABASES = { 'default': dj_database_url.config() }
+    
+    # Honor the 'X-Forwarded-Proto' header for request.is_secure()
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    
+    # Allow all host headers
+    ALLOWED_HOSTS = ['*']
+    STATIC_ROOT = 'staticfiles'
+    MEDIA_ROOT = 'mediafiles'
+    STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+    #C:\.virtualenvs\django18_project\static\static
+    )
 
 #Crispy FORM TAGs SETTINGS
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
