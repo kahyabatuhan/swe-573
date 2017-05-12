@@ -164,6 +164,12 @@ USE_TZ = True
     # #C:\.virtualenvs\django18_project\static\static
 # )
 
+STATIC_ROOT = 'staticfiles'
+STATICFILES_DIRS = (
+  os.path.join(BASE_DIR, 'static'),
+  #C:\.virtualenvs\django18_project\static\static
+)
+
 #Crispy FORM TAGs SETTINGS
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
