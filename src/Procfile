@@ -1,1 +1,1 @@
-web: gunicorn my_django18_project.wsgi
+web: gunicorn my_django18_project.wsgi --preload
