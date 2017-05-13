@@ -52,7 +52,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '3xzhjkgr@l!db8iuq%n8l)o8+dx6z-4mo3fb-lf7!(63mpm$ky'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 
 
@@ -91,7 +91,7 @@ ROOT_URLCONF = 'my_django18_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [ os.path.join(os.path.dirname(BASE_DIR), 'static', 'templates')],
+        'DIRS': [ os.path.join(BASE_DIR, 'static', 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
