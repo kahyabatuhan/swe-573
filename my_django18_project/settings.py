@@ -168,7 +168,7 @@ if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     
     # Allow all host headers
-    ALLOWED_HOSTS = ['*']
+    ALLOWED_HOSTS = ['tossaword.com','www.tossaword.com']
     STATIC_ROOT = 'staticfiles'
     MEDIA_ROOT = 'mediafiles'
     STATICFILES_DIRS = (
