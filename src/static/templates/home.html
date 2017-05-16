@@ -56,36 +56,41 @@
 
 <input type="text" id="search_box" />
 <button id="btn_search" class='btn btn-default'>Toss</button>
-<ul id="result">
-</ul>
+
+<div style="margin-left:20px">
+    <table id="jqGrid"></table>
+    <div id="jqGridPager"></div>
+</div>
 
 <script type="text/javascript">
-
 $(document).ready(function() {
     bind()
 })
-
 function bind() {
     $("#btn_search").click(function(){
         var keyword = $("#search_box").val()
         show_list(keyword)
     })
 }
-
-
-
-
 function show_list(keyword) {
-
-    $.ajax({
-        url: "/search/?q=" + keyword
-    }).done(function(res){
-        render_list(res)
-    })
+        $('#jqGrid').trigger( 'reloadGrid' );
+        
+        $("#jqGrid").jqGrid({
+        url: "/search/?q=" + keyword,
+        datatype: "json",
+         colModel: [
+            { label: 'Tweet', name: 'name', width: 200 },
+            { label: 'Score', name: 'score', width: 100, sorttype: 'integer' }                
+        ],
+        viewrecords: true, // show the current page, data rang and total records on the toolbar
+        width: 1080,
+        height: 400,
+        rowNum: 30,
+        loadonce: true, // this is just for the demo
+        pager: "#jqGridPager"
+    });
 
 }
-
-
 function render_list(data) {
     var template = "<li></li>";
     var container = $("#result");
@@ -96,9 +101,8 @@ function render_list(data) {
         container.append(template);
     };
 }
-
-
 </script>
+
 
  {% else %}
 <div class="row">
