@@ -15,7 +15,35 @@ import os
 #from settings_secret import *
 import datetime
 
+#email credentials
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'yelikmelik@gmail.com'
+EMAIL_HOST_PASSWORD = "password"#os.environ['EMAIL_HOST_PASSWORD']
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
+#amazonS3 credentials
+
+# AWS_ACCESS_KEY_ID = "password"#os.environ['AWS_ACCESS_KEY_ID']
+# AWS_SECRET_ACCESS_KEY = "password"#os.environ['AWS_SECRET_ACCESS_KEY']
+# AWS_STORAGE_BUCKET_NAME = 'tawamazon'
+# STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+# S3_URL = '//%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
+# MEDIA_URL = S3_URL + 'media/'
+# STATIC_URL = S3_URL + 'static/'
+# ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
+# date_two_months_later = datetime.date.today() + datetime.timedelta(2 * 365 / 12)
+# expires = date_two_months_later.strftime('%A, %d %B %Y 20:00:00 GMT')
+# AWS_HEADERS = {
+    # 'Expires': expires,
+    # 'Cache-Control': 'max-age=86400',
+# }
+
+twt_APP_KEY = "mUEtXSXEFxQFpLHsSF55PCers"
+twt_APP_SECRET = "EwEhFr1cIVnhoGtJJj8GXX8ikWI8y1NUQGALnNYWnOWPvzCrP1"
+twt_OAUTH_TOKEN = "82124255-qYlivXrhohTDK3eiQkG4wvDVYuST9hcldN3wVJ3va"
+twt_OAUTH_TOKEN_SECRET = "HFjPTOJRhiPT76jkm2XA4lBPS5Uk2ZEfvGm5OTfz41zAV"
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -28,7 +56,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '3xzhjkgr@l!db8iuq%n8l)o8+dx6z-4mo3fb-lf7!(63mpm$ky'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
+
+
 
 
 #Mail credentials imported from settings_secret
@@ -115,19 +145,19 @@ USE_L10N = True
 USE_TZ = True
 
 
-##Static files (CSS, JavaScript, Images)
-##https://docs.djangoproject.com/en/1.8/howto/static-files/
-#MEDIA_URL = "/media/"
-#MEDIA_ROOT = os.path.join(BASE_DIR, 'static', 'media')
-##C:\.virtualenvs\django18_project\static\media
-#
-#STATIC_URL = '/static/'
-#STATIC_ROOT = os.path.join(BASE_DIR, 'static', 'root')
-##C:\.virtualenvs\django18_project\static\root
-#STATICFILES_DIRS = (
-    #os.path.join(BASE_DIR, 'static', 'static'),
-    ##C:\.virtualenvs\django18_project\static\static
-#)
+#Static files (CSS, JavaScript, Images)
+#https://docs.djangoproject.com/en/1.8/howto/static-files/
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static', 'media')
+#C:\.virtualenvs\django18_project\static\media
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static', 'root')
+#C:\.virtualenvs\django18_project\static\root
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static', 'static'),
+    #C:\.virtualenvs\django18_project\static\static
+)
 
 if not DEBUG:
     try:
@@ -142,44 +172,13 @@ if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     
     # Allow all host headers
-    ALLOWED_HOSTS = ['tossaword.com','www.tossaword.com']
+    ALLOWED_HOSTS = ['*','tossaword.com','www.tossaword.com']
     STATIC_ROOT = 'staticfiles'
     MEDIA_ROOT = 'mediafiles'
     STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
     #C:\.virtualenvs\django18_project\static\static
     )
-    #email credentials
-    EMAIL_HOST = 'smtp.gmail.com'
-    EMAIL_HOST_USER = 'yelikmelik@gmail.com'
-    EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
-    EMAIL_PORT = 587
-    EMAIL_USE_TLS = True
-
-    #amazonS3 credentials
-    AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
-    AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
-    AWS_STORAGE_BUCKET_NAME = 'tawamazon'
-    STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-    S3_URL = '//%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
-    MEDIA_URL = S3_URL + 'media/'
-    STATIC_URL = S3_URL + 'static/'
-    ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
-    date_two_months_later = datetime.date.today() + datetime.timedelta(2 * 365 / 12)
-    expires = date_two_months_later.strftime('%A, %d %B %Y 20:00:00 GMT')
-    AWS_HEADERS = {
-        'Expires': expires,
-        'Cache-Control': 'max-age=86400',
-    }
-    TIME_ZONE = None
-
-    #twitter credentials
-    twt_APP_KEY = os.environ['twt_APP_KEY']
-    twt_APP_SECRET = os.environ['twt_APP_SECRET'] 
-    twt_OAUTH_TOKEN = os.environ['twt_OAUTH_TOKEN'] 
-    twt_OAUTH_TOKEN_SECRET = os.environ['twt_OAUTH_TOKEN_SECRET'] 
-
 
 SCORES_FOLDER = os.path.join(BASE_DIR, "static" )
 

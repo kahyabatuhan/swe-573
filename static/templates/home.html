@@ -8,12 +8,12 @@
 <style>
 {% block style %}
 .navbar-static-top {
-    margin-bottom: 0px !important;
+	margin-bottom: 0px !important;
 }
 
 .jumbotron {
-    background-color:#0E3D14;
-    color: #FFF;
+	background-color:#0E3D14;
+	color: #FFF;
 }
 
 {% endblock %}
@@ -26,22 +26,22 @@
 
 <div class="jumbotron">
  <div class="container">
-    <div class="row">
-        <div class='col-sm-6'>
-        <h1>Toss a Word</h1>
-        <p>The Toss a Word project is designed to get your curiosity about a word satisfied. The goal is to show you wheather sentiment of latest tweets containing your word is pozitive or not. Join Us today.</p>
-        <p>
-        <a class="btn btn-lg btn-primary" href="{% url 'registration_register' %}" role="button">Join Us &raquo;</a>
-        </p>
-        </div>
-        
-        <div class='col-sm-6' >
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/xsz62kEDuM8" frameborder="0" allowfullscreen></iframe>
+	<div class="row">
+		<div class='col-sm-6'>
+		<h1>Toss a Word</h1>
+		<p>The Toss a Word project is designed to get your curiosity about a word satisfied. The goal is to show you wheather sentiment of latest tweets containing your word is pozitive or not. Join Us today.</p>
+		<p>
+		<a class="btn btn-lg btn-primary" href="{% url 'registration_register' %}" role="button">Join Us &raquo;</a>
+		</p>
+		</div>
+		
+		<div class='col-sm-6' >
+			<iframe width="560" height="315" src="https://www.youtube.com/embed/xsz62kEDuM8" frameborder="0" allowfullscreen></iframe>
 
-        </div>
-        
-        </div>
-    </div>
+ 		</div>
+ 		
+		</div>
+	</div>
  </div>
  {% endif %}
 {% endblock %}
