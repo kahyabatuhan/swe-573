@@ -24,4 +24,5 @@ urlpatterns = [
     url(r'^contact/$', 'profiles.views.contact', name='contact'),
     url(r'^about/$', 'profiles.views.about', name='about'),
     url(r'^accounts/', include('registration.backends.default.urls')),
+    url(r'^search/$', 'my_django18_project.views.twt_search', name='search'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
