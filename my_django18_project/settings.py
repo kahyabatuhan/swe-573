@@ -15,36 +15,7 @@ import os
 #from settings_secret import *
 import datetime
 
-#email credentials
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'yelikmelik@gmail.com'
-EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
 
-#amazonS3 credentials
-
-AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
-AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
-AWS_STORAGE_BUCKET_NAME = 'tawamazon'
-STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-S3_URL = '//%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
-MEDIA_URL = S3_URL + 'media/'
-STATIC_URL = S3_URL + 'static/'
-ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
-date_two_months_later = datetime.date.today() + datetime.timedelta(2 * 365 / 12)
-expires = date_two_months_later.strftime('%A, %d %B %Y 20:00:00 GMT')
-AWS_HEADERS = {
-    'Expires': expires,
-    'Cache-Control': 'max-age=86400',
-}
-
-#twitter credentials
-twt_APP_KEY = os.environ['twt_APP_KEY']
-twt_APP_SECRET = os.environ['twt_APP_SECRET'] 
-twt_OAUTH_TOKEN = os.environ['twt_OAUTH_TOKEN'] 
-twt_OAUTH_TOKEN_SECRET = os.environ['twt_OAUTH_TOKEN_SECRET'] 
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -178,6 +149,36 @@ if not DEBUG:
     os.path.join(BASE_DIR, 'static'),
     #C:\.virtualenvs\django18_project\static\static
     )
+    #email credentials
+    EMAIL_HOST = 'smtp.gmail.com'
+    EMAIL_HOST_USER = 'yelikmelik@gmail.com'
+    EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
+    EMAIL_PORT = 587
+    EMAIL_USE_TLS = True
+
+    #amazonS3 credentials
+    AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
+    AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
+    AWS_STORAGE_BUCKET_NAME = 'tawamazon'
+    STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+    S3_URL = '//%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
+    MEDIA_URL = S3_URL + 'media/'
+    STATIC_URL = S3_URL + 'static/'
+    ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
+    date_two_months_later = datetime.date.today() + datetime.timedelta(2 * 365 / 12)
+    expires = date_two_months_later.strftime('%A, %d %B %Y 20:00:00 GMT')
+    AWS_HEADERS = {
+        'Expires': expires,
+        'Cache-Control': 'max-age=86400',
+    }
+
+    #twitter credentials
+    twt_APP_KEY = os.environ['twt_APP_KEY']
+    twt_APP_SECRET = os.environ['twt_APP_SECRET'] 
+    twt_OAUTH_TOKEN = os.environ['twt_OAUTH_TOKEN'] 
+    twt_OAUTH_TOKEN_SECRET = os.environ['twt_OAUTH_TOKEN_SECRET'] 
+
 
 SCORES_FOLDER = os.path.join(BASE_DIR, "static" )
 
