@@ -172,6 +172,7 @@ if not DEBUG:
         'Expires': expires,
         'Cache-Control': 'max-age=86400',
     }
+    TIME_ZONE = None
 
     #twitter credentials
     twt_APP_KEY = os.environ['twt_APP_KEY']
