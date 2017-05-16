@@ -26,12 +26,19 @@ class TWT(object):
 
     @staticmethod
     def find(name):
+        """
+        searchs for the given keyword
+        :return: returns a list of matching keyword objects
+        """
         twitter = Twython(TWT.APP_KEY, TWT.APP_SECRET, TWT.OAUTH_TOKEN, TWT.OAUTH_TOKEN_SECRET)
         ts = twitter.search(q=name, lang = 'en', result_type = 'recent')
         tl = []
         for tweet in ts['statuses']:
             tl.append({'name': tweet['text'], 'score': scoreTweet(tweet) })
-        return tl
+
+        json_response = tl
+        return json_response
+
 
 #Gets the text, sans links, hashtags, mentions, media, and symbols.
 def get_text_cleaned(tweet):
@@ -82,4 +89,5 @@ def scoreTweet(tweet):
         word = word.encode('utf-8')
         word_score = int(TWT.scores.get(word,'0'))
         tweet_score = tweet_score + word_score
-    return tweet_score      
+    return tweet_score        
+
