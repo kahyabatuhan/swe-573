@@ -38,7 +38,7 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 #amazonS3 credentials
 AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
-AWS_SECRET_ACCESS_KEY = "Cnh7gpsZqbVg3iJ4+ZGAsnw0vEk98uZwzfutVrmZ" #os.environ['AWS_SECRET_ACCESS_KEY']
+AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
 AWS_STORAGE_BUCKET_NAME = 'tawamazon'
 STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
