@@ -17,6 +17,7 @@ from django.contrib import admin
 
 from django.conf import settings
 from django.conf.urls.static import static
+from my_django18_project import postRecord
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -25,4 +26,7 @@ urlpatterns = [
     url(r'^about/$', 'profiles.views.about', name='about'),
     url(r'^accounts/', include('registration.backends.default.urls')),
     url(r'^search/$', 'my_django18_project.views.twt_search', name='search'),
+    url(r'^insertToDb/$', 'my_django18_project.views.twt_save'),
+    url(r'^deleteFromDb/$', 'my_django18_project.views.twt_delete'),
+    url(r'^getHist/$', 'my_django18_project.views.twt_hist'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
