@@ -51,55 +51,204 @@
 
 {% block content %}
  {% if request.user.is_authenticated %}
+
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <h1>You are logged in, Let's get tweet scores!</h1>
 
-<input type="text" id="search_box" />
-<button id="btn_search" class='btn btn-default'>Toss</button>
+
 
 <div style="margin-left:20px">
-    <table id="jqGrid"></table>
-    <div id="jqGridPager"></div>
+    
+    <ul class="nav nav-tabs">
+    <li class="active"><a data-toggle="tab" href="#home">Home</a></li>
+    <li><a data-toggle="tab" href="#menu1">Search History</a></li>
+    </ul>
+
+  <div class="tab-content">
+    <div id="home" class="tab-pane fade in active">
+        <input type="text" id="search_box" />
+        <button id="btn_search" class='btn btn-default'>Toss</button>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+        <button id="btn_save" class="btn btn-primary">Save</button>
+    </div>
+    <div id="menu1" class="tab-pane fade">
+        <table id="jqGridHist"></table>
+        <div id="jqGridPagerHist"></div>
+        <button id="btn_del" class="btn btn-danger">Delete</button>
+    </div>   
+  </div>
 </div>
 
 <script type="text/javascript">
 $(document).ready(function() {
-    bind()
-})
-function bind() {
-    $("#btn_search").click(function(){
-        var keyword = $("#search_box").val()
-        show_list(keyword)
-    })
-}
-function show_list(keyword) {
-        $('#jqGrid').trigger( 'reloadGrid' );
-        
-        $("#jqGrid").jqGrid({
-        url: "/search/?q=" + keyword,
+    bind();
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+            // Send the token to same-origin, relative URLs only.
+            // Send the token only if the method warrants CSRF protection
+            // Using the CSRFToken value acquired earlier
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+ $("#jqGrid").jqGrid({
         datatype: "json",
          colModel: [
             { label: 'Tweet', name: 'name', width: 200 },
-            { label: 'Score', name: 'score', width: 100, sorttype: 'integer' }                
+            { label: 'Score', name: 'score', width: 100, sorttype: 'integer' }
         ],
         viewrecords: true, // show the current page, data rang and total records on the toolbar
         width: 1080,
         height: 400,
-        rowNum: 30,
+        rowNum: 10,
         loadonce: true, // this is just for the demo
+        multiselect:true,
         pager: "#jqGridPager"
     });
-
+});
+// using jQuery
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
 }
-function render_list(data) {
-    var template = "<li></li>";
-    var container = $("#result");
-    container.html("")
-    for (var i = data.length - 1; i >= 0; i--) {
-        var food = data[i];
-        var template = "<li>" + food.name +  "|| Score:" + food.score + "</li>";
-        container.append(template);
-    };
+var csrftoken = getCookie('csrftoken');
+
+function bind() {
+    $("#btn_search").click(function(){
+        var keyword = $("#search_box").val();
+        show_list(keyword);
+    });
+
+    $("#btn_save").click(function(){
+        var myGrid = $('#jqGrid');
+        var result = [];
+        var i, selRowIds = myGrid.jqGrid("getGridParam", "selarrrow"), n, rowData;
+        for (i = 0, n = selRowIds.length; i < n; i++) {
+            let jsonObj = {};
+            rowData = myGrid.jqGrid("getLocalRow", selRowIds[i]);
+            jsonObj["tw"] = rowData.name;
+            jsonObj["score"] = rowData.score;
+            //jsonObj["owner_id"] = {{request.user.id}};
+            result.push(jsonObj);
+        }
+
+        $.ajax({
+              url: "/insertToDb/"
+            , type: 'POST'
+            , dataType: 'json'
+            , data: JSON.stringify({list: result})
+            , beforeSend: function(xhr, settings) {
+                $.ajaxSettings.beforeSend(xhr, settings);
+            }
+            , success : function(data){
+                alert(data);
+                var ids = $('#jqGrid').getGridParam('selarrrow');
+                for (  var i = ids.length-1; i>=0; i--) {
+                  $('#jqGrid').delRowData(ids[i]);
+                }
+            }
+        });          
+    });
+
+    $("#btn_del").click(function(){
+        var myGrid = $('#jqGridHist');
+        var result = [];
+        var i, selRowIds = myGrid.jqGrid("getGridParam", "selarrrow"), n, rowData;
+        for (i = 0, n = selRowIds.length; i < n; i++) {
+            let jsonObj = {};
+            rowData = myGrid.jqGrid("getLocalRow", selRowIds[i]);
+            jsonObj["tw"] = rowData.tweet;
+            result.push(jsonObj);
+        }
+
+        $.ajax({
+              url: "/deleteFromDb/"
+            , type: 'POST'
+            , dataType: 'json'
+            , data: JSON.stringify({list: result})
+            , beforeSend: function(xhr, settings) {
+                $.ajaxSettings.beforeSend(xhr, settings);
+            }
+            , success : function(data){
+                alert(data);
+                
+                var ids = $('#jqGridHist').getGridParam('selarrrow');
+                for (  var i = ids.length-1; i>=0; i--) {
+                  $('#jqGridHist').delRowData(ids[i]);
+                }
+
+               
+            }
+        });          
+    });
+
+    $('.nav-tabs').bind('click', function (e){ 
+        if(e.target.text == 'Search History'){
+            show_hist();
+        }
+    });
+}
+function show_list(keyword) {
+        $.ajax({
+              url: "/search/?q=" + keyword
+            , type: 'GET'
+            , dataType: 'json'
+            , success : function(data){
+               var grid=$('#jqGrid');
+               grid.jqGrid('setGridParam', { datatype: 'local', data: data }).trigger("reloadGrid");                           
+            }
+        });          
+}
+function show_hist() {
+        $('#jqGridHist').trigger( 'reloadGrid' );
+        
+        $("#jqGridHist").jqGrid({
+        url: "/getHist/",
+        datatype: "json",
+         colModel: [
+            { label: 'Tweet', name: 'tweet', width: 200 },
+            { label: 'Score', name: 'score', width: 100, sorttype: 'integer' }
+        ],
+        viewrecords: true, // show the current page, data rang and total records on the toolbar
+        width: 1080,
+        height: 400,
+        rowNum: 10,
+        loadonce: true, // this is just for the demo
+        navOptions: { reloadGridOptions: { fromServer: true } },
+        multiselect: true,
+        pager: "#jqGridPagerHist"
+        });
+}
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+function sameOrigin(url) {
+    // test that a given url is a same-origin URL
+    // url could be relative or scheme relative or absolute
+    var host = document.location.host; // host + port
+    var protocol = document.location.protocol;
+    var sr_origin = '//' + host;
+    var origin = protocol + sr_origin;
+    // Allow absolute or scheme relative URLs to same origin
+    return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+        (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+        // or any other URL that isn't scheme relative or absolute i.e relative.
+        !(/^(\/\/|http:|https:).*/.test(url));
 }
 </script>
 
