@@ -162,6 +162,7 @@
                 width: 1080,
                 height: 400,
                 multiselect:true,
+                reloadAfterSubmit: true,
                 loadonce: true,
                 rowNum: 10,
                 rowList: [5, 10, 20],
@@ -179,7 +180,7 @@
                 caption: "Demonstrate how to implement searching with one collon searching field",
                 loadComplete: function () {
                     highlightFilteredData.call(this);
-                }
+                },
             }).jqGrid("navGrid", "#pager", {add: false, edit: false, del: false, search: false});
             // fill top toolbar
             $('#t_' + $.jgrid.jqID($grid[0].id))
@@ -327,13 +328,10 @@ function bind() {
             }
             , success : function(data){
                 alert(data);
-                
                 var ids = $('#jqGridHist').getGridParam('selarrrow');
                 for (  var i = ids.length-1; i>=0; i--) {
                   $('#jqGridHist').delRowData(ids[i]);
                 }
-
-               
             }
         });          
     });
@@ -341,6 +339,12 @@ function bind() {
         if(e.target.text == 'Search History'){
             show_hist();
         }
+        if(e.target.text == 'grid'){
+            $('#list').jqGrid("setGridParam", {datatype: 'json'});
+            $('#list').trigger( 'reloadGrid' );
+        }
+        
+
     });
     $("#btn_del2").click(function(){
         var myGrid = $('#list');
@@ -363,13 +367,12 @@ function bind() {
             }
             , success : function(data){
                 alert(data);
-                
-                var ids = $('#list').getGridParam('selarrrow');
+                var ids = $('#jqGridHist').getGridParam('selarrrow');
                 for (  var i = ids.length-1; i>=0; i--) {
-                  $('#list').delRowData(ids[i]);
+                  $('#jqGridHist').delRowData(ids[i]);
                 }
-
-               
+                //$('#list').jqGrid("setGridParam", {datatype: 'json'});
+                //$('#list').trigger( 'reloadGrid' );
             }
         });          
     });
