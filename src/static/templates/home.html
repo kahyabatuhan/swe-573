@@ -177,14 +177,23 @@
                 sortorder: "desc",
                 shrinkToFit: false,
                 height: "100%",
-                caption: "Demonstrate how to implement searching with one collon searching field",
+                //caption: "Demonstrate how to implement searching with one collon searching field",
                 loadComplete: function () {
                     highlightFilteredData.call(this);
                 },
+                gridComplete: function() { 
+                    var colAvg = $grid.jqGrid('getCol', 'score', false, 'avg'); 
+                    var colSum = $grid.jqGrid('getCol', 'score', false, 'sum'); 
+                    var colCnt = $grid.jqGrid('getCol', 'score', false, 'count'); 
+                    //$grid.jqGrid('footerData', 'set', { score: colAvg });
+                    document.getElementById('lblAvgScore').innerHTML = 'Avg Score: ' + colAvg;
+                    document.getElementById('lblSumScore').innerHTML = 'Total Score: ' + colSum;
+                    document.getElementById('lblCntTweet').innerHTML = 'Tweet Count: ' + colCnt;
+                }
             }).jqGrid("navGrid", "#pager", {add: false, edit: false, del: false, search: false});
             // fill top toolbar
             $('#t_' + $.jgrid.jqID($grid[0].id))
-                .append($("<div><label for=\"globalSearchText\">Global search in grid for:&nbsp;</label><input id=\"globalSearchText\" type=\"text\"></input>&nbsp;<button id=\"globalSearch\" type=\"button\">Search</button></div>"));
+                .append($("<div><label for=\"globalSearchText\">Search in Tweet for:&nbsp;</label><input id=\"globalSearchText\" type=\"text\"></input>&nbsp;<button id=\"globalSearch\" type=\"button\">Search</button><label id=\"lblAvgScore\" style=\"text-indent: 40px\">Avg Score:</label><label id=\"lblSumScore\" style=\"text-indent: 40px\">Sum Score:</label><label id=\"lblCntTweet\" style=\"text-indent: 40px\">Tweet Count:</label></div>"));
             $("#globalSearchText").keypress(function (e) {
                 var key = e.charCode || e.keyCode || 0;
                 if (key === $.ui.keyCode.ENTER) { // 13
@@ -348,6 +357,15 @@ function bind() {
         if(e.target.text == 'grid'){
             $('#list').jqGrid("setGridParam", {datatype: 'json'});
             $('#list').trigger( 'reloadGrid' );
+            var result = [];
+            var selRowIds = $('#list').getGridParam('selarrrow');
+            var i, n, rowData;
+            let totalScore = 0;
+            for (i = 0, n = selRowIds.length; i < n; i++) {
+                rowData = $('#list').jqGrid("getLocalRow", selRowIds[i]);
+                totalScore = totalScore + rowData.score;
+            }
+            document.getElementById('lblAvgScore').innerHTML = 'Avg Score: ' + selRowIds.length; //totalScore/selRowIds.length;
         }
         
 
