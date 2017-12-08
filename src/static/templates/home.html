@@ -164,8 +164,8 @@
                 multiselect:true,
                 reloadAfterSubmit: true,
                 loadonce: true,
-                rowNum: 10,
-                rowList: [5, 10, 20],
+                rowNum: 20,
+                rowList: [5, 10, 20, 50],
                 toolbar: [true, "top"],
                 pager: "#pager",
                 gridview: true,
@@ -251,6 +251,12 @@ $.ajaxSetup({
         multiselect:true,
         pager: "#jqGridPager"
     });
+});
+$("#search_box").keypress(function (e) {
+    var key = e.charCode || e.keyCode || 0;
+    if (key === $.ui.keyCode.ENTER) { // 13
+        $("#btn_search").click();
+    }
 });
 // using jQuery
 function getCookie(name) {
@@ -367,9 +373,9 @@ function bind() {
             }
             , success : function(data){
                 alert(data);
-                var ids = $('#jqGridHist').getGridParam('selarrrow');
+                var ids = $('#list').getGridParam('selarrrow');
                 for (  var i = ids.length-1; i>=0; i--) {
-                  $('#jqGridHist').delRowData(ids[i]);
+                  $('#list').delRowData(ids[i]);
                 }
                 //$('#list').jqGrid("setGridParam", {datatype: 'json'});
                 //$('#list').trigger( 'reloadGrid' );
