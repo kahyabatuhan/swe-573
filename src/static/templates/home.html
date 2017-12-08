@@ -62,12 +62,13 @@
     <ul class="nav nav-tabs">
     <li class="active"><a data-toggle="tab" href="#home">Home</a></li>
     <li><a data-toggle="tab" href="#menu1">Search History</a></li>
+    <li><a data-toggle="tab" href="#menu2">grid</a></li>
     </ul>
 
   <div class="tab-content">
     <div id="home" class="tab-pane fade in active">
         <input type="text" id="search_box" />
-        <button id="btn_search" class='btn btn-default'>Toss</button>
+        <button id="btn_search" class='btn btn-primary'>Toss</button>
         <table id="jqGrid"></table>
         <div id="jqGridPager"></div>
         <button id="btn_save" class="btn btn-primary">Save</button>
@@ -76,9 +77,151 @@
         <table id="jqGridHist"></table>
         <div id="jqGridPagerHist"></div>
         <button id="btn_del" class="btn btn-danger">Delete</button>
-    </div>   
+    </div> 
+    <div id="menu2" class="tab-pane fade">
+        <table id="list"><tr><td></td></tr></table>
+        <div id="pager"></div>
+        <button id="btn_del2" class="btn btn-danger">Delete</button>
+    </div> 
+
   </div>
 </div>
+
+<script type="text/javascript">
+    //<![CDATA[
+        /*global $ */
+        /*jslint plusplus: true */
+        $(function () {
+            "use strict";
+            var mydata = [
+                    { id: "1",  invdate: "2007-10-01", name: "test",   note: "3note",   amount: "200.00", tax: "10.00", closed: true,  ship_via: "TN", total: "210.00" },
+                    { id: "2",  invdate: "2007-10-02", name: "test2",  note: "3note2",  amount: "300.00", tax: "20.00", closed: false, ship_via: "FE", total: "320.00" },
+                    { id: "3",  invdate: "2007-09-01", name: "test3",  note: "3note3",  amount: "400.00", tax: "30.00", closed: false, ship_via: "FE", total: "430.00" },
+                    { id: "4",  invdate: "2007-10-04", name: "test4",  note: "3note4",  amount: "200.00", tax: "10.00", closed: true,  ship_via: "TN", total: "210.00" },
+                    { id: "5",  invdate: "2007-10-31", name: "test5",  note: "3note5",  amount: "300.00", tax: "20.00", closed: false, ship_via: "FE", total: "320.00" },
+                    { id: "6",  invdate: "2007-09-06", name: "test6",  note: "3note6",  amount: "400.00", tax: "30.00", closed: false, ship_via: "FE", total: "430.00" },
+                    { id: "7",  invdate: "2007-10-04", name: "test7",  note: "3note7",  amount: "200.00", tax: "10.00", closed: true,  ship_via: "TN", total: "210.00" },
+                    { id: "8",  invdate: "2007-10-03", name: "test8",  note: "3note8",  amount: "300.00", tax: "20.00", closed: false, ship_via: "FE", total: "320.00" },
+                    { id: "9",  invdate: "2007-09-02", name: "test9",  note: "3note9",  amount: "400.00", tax: "30.00", closed: false, ship_via: "TN", total: "430.00" },
+                    { id: "10", invdate: "2007-09-08", name: "test10", note: "3note10", amount: "500.00", tax: "30.00", closed: true,  ship_via: "TN", total: "530.00" },
+                    { id: "11", invdate: "2007-09-08", name: "test11", note: "3note11", amount: "500.00", tax: "30.00", closed: false, ship_via: "FE", total: "530.00" },
+                    { id: "12", invdate: "2007-09-10", name: "test12", note: "3note12", amount: "500.00", tax: "30.00", closed: false, ship_via: "FE", total: "530.00" }
+                ],
+                $grid = $("#list"),
+                initDatepicker = function (elem) {
+                    $(elem).datepicker({
+                        dateFormat: "dd-M-yy",
+                        autoSize: true,
+                        changeYear: true,
+                        changeMonth: true,
+                        showButtonPanel: true,
+                        showWeek: true
+                    });
+                },
+                numberTemplate = {formatter: "number", align: "right", sorttype: "number",
+                    editrules: {number: true, required: true},
+                    searchoptions: { sopt: ["eq", "ne", "lt", "le", "gt", "ge", "nu", "nn", "in", "ni"] }},
+                highlightFilteredData = function () {
+                    var $self = $(this), filters, i, l, rules, rule, iCol,
+                        isFiltered = $self.jqGrid("getGridParam", "search"),
+                        postData = $self.jqGrid("getGridParam", "postData"),
+                        colModel = $self.jqGrid("getGridParam", "colModel"),
+                        colIndexByName = {};
+
+                    // validate whether we have input for highlighting
+                    if (!isFiltered || typeof postData !== "object") {
+                        return;
+                    }
+                    filters = $.parseJSON(postData.filters);
+                    if (filters == null || filters.rules == null && filters.rules.length <= 0) {
+                        return;
+                    }
+
+                    // fill colIndexByName which get easy column index by the column name
+                    for (i = 0, l = colModel.length; i < l; i++) {
+                        colIndexByName[colModel[i].name] = i;
+                    }
+
+                    rules = filters.rules;
+                    for (i = 0, l = rules.length; i < l; i++) {
+                        rule = rules[i];
+                        iCol = colIndexByName[rule.field];
+                        if (iCol !== undefined) {
+                            $self.find(">tbody>tr.jqgrow>td:nth-child(" + (iCol + 1) + ")").highlight(rule.data);
+                        }
+                    }
+                };
+
+            $grid.jqGrid({
+                url: "/getHist/",
+                datatype: "json",
+                colModel: [
+                { label: 'Tweet', name: 'tweet', width: 750, editrules: {required: true} },
+                { label: 'Score', name: 'score', width: 100, sorttype: 'integer' }
+                ],
+                width: 1080,
+                height: 400,
+                multiselect:true,
+                loadonce: true,
+                rowNum: 10,
+                rowList: [5, 10, 20],
+                toolbar: [true, "top"],
+                pager: "#pager",
+                gridview: true,
+                rownumbers: true,
+                autoencode: true,
+                ignoreCase: true,
+                sortname: "invdate",
+                viewrecords: true,
+                sortorder: "desc",
+                shrinkToFit: false,
+                height: "100%",
+                caption: "Demonstrate how to implement searching with one collon searching field",
+                loadComplete: function () {
+                    highlightFilteredData.call(this);
+                }
+            }).jqGrid("navGrid", "#pager", {add: false, edit: false, del: false, search: false});
+            // fill top toolbar
+            $('#t_' + $.jgrid.jqID($grid[0].id))
+                .append($("<div><label for=\"globalSearchText\">Global search in grid for:&nbsp;</label><input id=\"globalSearchText\" type=\"text\"></input>&nbsp;<button id=\"globalSearch\" type=\"button\">Search</button></div>"));
+            $("#globalSearchText").keypress(function (e) {
+                var key = e.charCode || e.keyCode || 0;
+                if (key === $.ui.keyCode.ENTER) { // 13
+                    $("#globalSearch").click();
+                }
+            });
+            $("#globalSearch").button({
+                icons: { primary: "ui-icon-search" },
+                text: false
+            }).click(function () {
+                var postData = $grid.jqGrid("getGridParam", "postData"),
+                    colModel = $grid.jqGrid("getGridParam", "colModel"),
+                    rules = [],
+                    searchText = $("#globalSearchText").val(),
+                    l = colModel.length,
+                    i,
+                    cm;
+                for (i = 0; i < l; i++) {
+                    cm = colModel[i];
+                    if (cm.search !== false && (cm.stype === undefined || cm.stype === "text")) {
+                        rules.push({
+                            field: cm.name,
+                            op: "cn",
+                            data: searchText
+                        });
+                    }
+                }
+                postData.filters = JSON.stringify({
+                    groupOp: "OR",
+                    rules: rules
+                });
+                $grid.jqGrid("setGridParam", { search: true });
+                $grid.trigger("reloadGrid", [{page: 1, current: true}]);
+                return false;
+            });
+        });
+    //]]>
+    </script>
 
 <script type="text/javascript">
 $(document).ready(function() {
@@ -194,11 +337,41 @@ function bind() {
             }
         });          
     });
-
     $('.nav-tabs').bind('click', function (e){ 
         if(e.target.text == 'Search History'){
             show_hist();
         }
+    });
+    $("#btn_del2").click(function(){
+        var myGrid = $('#list');
+        var result = [];
+        var i, selRowIds = myGrid.jqGrid("getGridParam", "selarrrow"), n, rowData;
+        for (i = 0, n = selRowIds.length; i < n; i++) {
+            let jsonObj = {};
+            rowData = myGrid.jqGrid("getLocalRow", selRowIds[i]);
+            jsonObj["tw"] = rowData.tweet;
+            result.push(jsonObj);
+        }
+
+        $.ajax({
+              url: "/deleteFromDb/"
+            , type: 'POST'
+            , dataType: 'json'
+            , data: JSON.stringify({list: result})
+            , beforeSend: function(xhr, settings) {
+                $.ajaxSettings.beforeSend(xhr, settings);
+            }
+            , success : function(data){
+                alert(data);
+                
+                var ids = $('#list').getGridParam('selarrrow');
+                for (  var i = ids.length-1; i>=0; i--) {
+                  $('#list').delRowData(ids[i]);
+                }
+
+               
+            }
+        });          
     });
 }
 function show_list(keyword) {

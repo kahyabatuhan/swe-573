@@ -28,17 +28,17 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '3xzhjkgr@l!db8iuq%n8l)o8+dx6z-4mo3fb-lf7!(63mpm$ky'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 #email credentials
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'yelikmelik@gmail.com'
-EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
+EMAIL_HOST_PASSWORD = '' #os.environ['EMAIL_HOST_PASSWORD']
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 #amazonS3 credentials
-AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
-AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
+AWS_ACCESS_KEY_ID = 'AKIAIO5J55CHPJYLADLQ' #os.environ['AWS_ACCESS_KEY_ID']
+AWS_SECRET_ACCESS_KEY = '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' #os.environ['AWS_SECRET_ACCESS_KEY']
 AWS_STORAGE_BUCKET_NAME = 'tawamazon'
 STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
@@ -54,10 +54,10 @@ AWS_HEADERS = {
 }
 
 #twitter credentials
-twt_APP_KEY = os.environ['twt_APP_KEY']
-twt_APP_SECRET = os.environ['twt_APP_SECRET'] 
-twt_OAUTH_TOKEN = os.environ['twt_OAUTH_TOKEN'] 
-twt_OAUTH_TOKEN_SECRET = os.environ['twt_OAUTH_TOKEN_SECRET'] 
+twt_APP_KEY = 'mUEtXSXEFxQFpLHsSF55PCers' #os.environ['twt_APP_KEY']
+twt_APP_SECRET = 'EwEhFr1cIVnhoGtJJj8GXX8ikWI8y1NUQGALnNYWnOWPvzCrP1' #os.environ['twt_APP_SECRET'] 
+twt_OAUTH_TOKEN = '82124255-qYlivXrhohTDK3eiQkG4wvDVYuST9hcldN3wVJ3va' #os.environ['twt_OAUTH_TOKEN'] 
+twt_OAUTH_TOKEN_SECRET = 'HFjPTOJRhiPT76jkm2XA4lBPS5Uk2ZEfvGm5OTfz41zAV' #os.environ['twt_OAUTH_TOKEN_SECRET'] 
 
 #Mail credentials imported from settings_secret
 
@@ -126,6 +126,7 @@ DATABASES = {
         'NAME': 'django_db',
         'USER': 'localuser',
         'PASSWORD': 'local007',
+        'OPTIONS': {'read_default_file': 'my.cnf'},
     }
 }
 
