@@ -6,6 +6,9 @@ class Record(models.Model):
     score = models.IntegerField()
     owner = models.ForeignKey(settings.AUTH_USER_MODEL)
 
+    def __unicode__(self):
+      return self.tweet
+
     def save(self, *args, **kwargs):
     	self.full_clean()
     	super(Record, self).save(*args,**kwargs)
@@ -13,5 +16,6 @@ class Record(models.Model):
     def delete(self, *args, **kwargs):
     	self.full_clean()
     	super(Record, self).delete(*args,**kwargs)
+
 
 

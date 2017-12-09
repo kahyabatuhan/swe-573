@@ -21,7 +21,7 @@ def twt_save(request):
     json_data = json.loads(request.body)
     json_data = json_data['list']
     for elm in json_data:
-    	rec = Record(tweet=elm['tw'],score=elm['score'],owner_id=request.user.id)
+    	rec = Record(tweet=elm['tw'],score=elm['score'],owner=request.user)
     	rec.save()
     return HttpResponse(json.dumps("Successfuly saved"), content_type="application/json")
 
