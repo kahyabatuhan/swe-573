@@ -23,8 +23,4 @@ if not settings.DEBUG:
 		from dj_static import Cling
 		application = Cling(get_wsgi_application())
 	except:
-<<<<<<< HEAD
 		pass
-=======
-		pass
->>>>>>> b

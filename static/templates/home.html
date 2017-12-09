@@ -51,38 +51,6 @@
 
 {% block content %}
  {% if request.user.is_authenticated %}
-<<<<<<< HEAD
- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<h1>You are logged in, Let's get tweet scores!</h1>
-
-<input type="text" id="search_box" />
-<button id="btn_search" class='btn btn-default'>Toss</button>
-
-<div style="margin-left:20px">
-    <table id="jqGrid"></table>
-    <div id="jqGridPager"></div>
-</div>
-
-<script type="text/javascript">
-$(document).ready(function() {
-    bind()
-})
-function bind() {
-    $("#btn_search").click(function(){
-        var keyword = $("#search_box").val()
-        show_list(keyword)
-    })
-}
-function show_list(keyword) {
-        $('#jqGrid').trigger( 'reloadGrid' );
-        
-        $("#jqGrid").jqGrid({
-        url: "/search/?q=" + keyword,
-        datatype: "json",
-         colModel: [
-            { label: 'Tweet', name: 'name', width: 200 },
-            { label: 'Score', name: 'score', width: 100, sorttype: 'integer' }                
-=======
 
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <h1>You are logged in, Let's get tweet scores!</h1>
@@ -292,28 +260,10 @@ $.ajaxSetup({
          colModel: [
             { label: 'Tweet', name: 'name', width: 200 },
             { label: 'Score', name: 'score', width: 100, sorttype: 'number' }
->>>>>>> b
         ],
         viewrecords: true, // show the current page, data rang and total records on the toolbar
         width: 1080,
         height: 400,
-<<<<<<< HEAD
-        rowNum: 30,
-        loadonce: true, // this is just for the demo
-        pager: "#jqGridPager"
-    });
-
-}
-function render_list(data) {
-    var template = "<li></li>";
-    var container = $("#result");
-    container.html("")
-    for (var i = data.length - 1; i >= 0; i--) {
-        var food = data[i];
-        var template = "<li>" + food.name +  "|| Score:" + food.score + "</li>";
-        container.append(template);
-    };
-=======
         rowNum: 10,
         loadonce: true, // this is just for the demo
         multiselect:true,
@@ -454,7 +404,6 @@ function sameOrigin(url) {
         (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
         // or any other URL that isn't scheme relative or absolute i.e relative.
         !(/^(\/\/|http:|https:).*/.test(url));
->>>>>>> b
 }
 </script>
 
