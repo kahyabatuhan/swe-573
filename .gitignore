@@ -1,0 +1,10 @@
+env
+*.DS_Store
+*.pyc
+__pycache__
+
+src\my_django18_project\settings_secret.py
+my_django18_project\settings_secret.py
+settings_secret.py
+staticfiles
+mediafiles
