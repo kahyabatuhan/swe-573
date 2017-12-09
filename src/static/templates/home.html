@@ -93,21 +93,7 @@
         /*jslint plusplus: true */
         $(function () {
             "use strict";
-            var mydata = [
-                    { id: "1",  invdate: "2007-10-01", name: "test",   note: "3note",   amount: "200.00", tax: "10.00", closed: true,  ship_via: "TN", total: "210.00" },
-                    { id: "2",  invdate: "2007-10-02", name: "test2",  note: "3note2",  amount: "300.00", tax: "20.00", closed: false, ship_via: "FE", total: "320.00" },
-                    { id: "3",  invdate: "2007-09-01", name: "test3",  note: "3note3",  amount: "400.00", tax: "30.00", closed: false, ship_via: "FE", total: "430.00" },
-                    { id: "4",  invdate: "2007-10-04", name: "test4",  note: "3note4",  amount: "200.00", tax: "10.00", closed: true,  ship_via: "TN", total: "210.00" },
-                    { id: "5",  invdate: "2007-10-31", name: "test5",  note: "3note5",  amount: "300.00", tax: "20.00", closed: false, ship_via: "FE", total: "320.00" },
-                    { id: "6",  invdate: "2007-09-06", name: "test6",  note: "3note6",  amount: "400.00", tax: "30.00", closed: false, ship_via: "FE", total: "430.00" },
-                    { id: "7",  invdate: "2007-10-04", name: "test7",  note: "3note7",  amount: "200.00", tax: "10.00", closed: true,  ship_via: "TN", total: "210.00" },
-                    { id: "8",  invdate: "2007-10-03", name: "test8",  note: "3note8",  amount: "300.00", tax: "20.00", closed: false, ship_via: "FE", total: "320.00" },
-                    { id: "9",  invdate: "2007-09-02", name: "test9",  note: "3note9",  amount: "400.00", tax: "30.00", closed: false, ship_via: "TN", total: "430.00" },
-                    { id: "10", invdate: "2007-09-08", name: "test10", note: "3note10", amount: "500.00", tax: "30.00", closed: true,  ship_via: "TN", total: "530.00" },
-                    { id: "11", invdate: "2007-09-08", name: "test11", note: "3note11", amount: "500.00", tax: "30.00", closed: false, ship_via: "FE", total: "530.00" },
-                    { id: "12", invdate: "2007-09-10", name: "test12", note: "3note12", amount: "500.00", tax: "30.00", closed: false, ship_via: "FE", total: "530.00" }
-                ],
-                $grid = $("#list"),
+            var $grid = $("#list"),
                 initDatepicker = function (elem) {
                     $(elem).datepicker({
                         dateFormat: "dd-M-yy",
@@ -146,7 +132,7 @@
                     for (i = 0, l = rules.length; i < l; i++) {
                         rule = rules[i];
                         iCol = colIndexByName[rule.field];
-                        if (iCol !== undefined) {
+                        if (iCol !== undefined && rule.field !=="score") {
                             $self.find(">tbody>tr.jqgrow>td:nth-child(" + (iCol + 1) + ")").highlight(rule.data);
                         }
                     }
@@ -156,16 +142,36 @@
                 url: "/getHist/",
                 datatype: "json",
                 colModel: [
-                { label: 'Tweet', name: 'tweet', width: 750, editrules: {required: true} },
-                { label: 'Score', name: 'score', width: 100, sorttype: 'integer' }
+                { 
+                    label: 'Tweet', 
+                    name: 'tweet', 
+                    width: 750, 
+                    editrules: {required: true}, 
+                    searchoptions: {
+                        sopt: ['cn', 'nc', 'bw', 'ew', 'in','ni','eq', 'ne'],
+                        defaultSearch: 'cn'
+                    },
+                    highlight: true },
+                 { 
+                    label: 'Score', 
+                    name: 'score', 
+                    width: 100, 
+                    sorttype: 'number',
+                    searchoptions: {
+                        // show search options
+                        sopt: ["ge","le","eq"],
+                        defaultSearch: 'ge'
+                    },
+                    highlight: false
+                 }
                 ],
                 width: 1080,
                 height: 400,
                 multiselect:true,
                 reloadAfterSubmit: true,
                 loadonce: true,
-                rowNum: 20,
-                rowList: [5, 10, 20, 50],
+                rowNum: 999999999,
+                rowList: [999999999, 10, 20, 50],
                 toolbar: [true, "top"],
                 pager: "#pager",
                 gridview: true,
@@ -176,10 +182,11 @@
                 viewrecords: true,
                 sortorder: "desc",
                 shrinkToFit: false,
-                height: "100%",
+                //height: "100%",
                 //caption: "Demonstrate how to implement searching with one collon searching field",
                 loadComplete: function () {
                     highlightFilteredData.call(this);
+                    $("option[value=999999999]").text('All');
                 },
                 gridComplete: function() { 
                     var colAvg = $grid.jqGrid('getCol', 'score', false, 'avg'); 
@@ -189,6 +196,7 @@
                     document.getElementById('lblAvgScore').innerHTML = 'Avg Score: ' + colAvg;
                     document.getElementById('lblSumScore').innerHTML = 'Total Score: ' + colSum;
                     document.getElementById('lblCntTweet').innerHTML = 'Tweet Count: ' + colCnt;
+
                 }
             }).jqGrid("navGrid", "#pager", {add: false, edit: false, del: false, search: false});
             // fill top toolbar
@@ -213,7 +221,7 @@
                     cm;
                 for (i = 0; i < l; i++) {
                     cm = colModel[i];
-                    if (cm.search !== false && (cm.stype === undefined || cm.stype === "text")) {
+                    if (cm.search !== false && (cm.stype === undefined || cm.stype === "text") && cm.highlight !== false) {
                         rules.push({
                             field: cm.name,
                             op: "cn",
@@ -225,8 +233,15 @@
                     groupOp: "OR",
                     rules: rules
                 });
+                $grid.jqGrid('filterToolbar',{
+                // JSON stringify all data from search, including search toolbar operators
+                stringResult: true,
+                // instuct the grid toolbar to show the search options
+                searchOperators: true
+                });
                 $grid.jqGrid("setGridParam", { search: true });
                 $grid.trigger("reloadGrid", [{page: 1, current: true}]);
+
                 return false;
             });
         });
@@ -250,7 +265,7 @@ $.ajaxSetup({
         datatype: "json",
          colModel: [
             { label: 'Tweet', name: 'name', width: 200 },
-            { label: 'Score', name: 'score', width: 100, sorttype: 'integer' }
+            { label: 'Score', name: 'score', width: 100, sorttype: 'number' }
         ],
         viewrecords: true, // show the current page, data rang and total records on the toolbar
         width: 1080,
@@ -356,16 +371,22 @@ function bind() {
         }
         if(e.target.text == 'grid'){
             $('#list').jqGrid("setGridParam", {datatype: 'json'});
+            $('#list').jqGrid('filterToolbar',{
+            // JSON stringify all data from search, including search toolbar operators
+            stringResult: true,
+            // instuct the grid toolbar to show the search options
+            searchOperators: true
+            });
             $('#list').trigger( 'reloadGrid' );
-            var result = [];
-            var selRowIds = $('#list').getGridParam('selarrrow');
-            var i, n, rowData;
-            let totalScore = 0;
-            for (i = 0, n = selRowIds.length; i < n; i++) {
-                rowData = $('#list').jqGrid("getLocalRow", selRowIds[i]);
-                totalScore = totalScore + rowData.score;
-            }
-            document.getElementById('lblAvgScore').innerHTML = 'Avg Score: ' + selRowIds.length; //totalScore/selRowIds.length;
+            //var result = [];
+            //var selRowIds = $('#list').getGridParam('selarrrow');
+            //var i, n, rowData;
+            //let totalScore = 0;
+            //for (i = 0, n = selRowIds.length; i < n; i++) {
+                //rowData = $('#list').jqGrid("getLocalRow", selRowIds[i]);
+                //totalScore = totalScore + rowData.score;
+            //}
+            //document.getElementById('lblAvgScore').innerHTML = 'Avg Score: ' + selRowIds.length; //totalScore/selRowIds.length;
         }
         
 
