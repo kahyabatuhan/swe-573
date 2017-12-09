@@ -61,8 +61,7 @@
     
     <ul class="nav nav-tabs">
     <li class="active"><a data-toggle="tab" href="#home">Home</a></li>
-    <li><a data-toggle="tab" href="#menu1">Search History</a></li>
-    <li><a data-toggle="tab" href="#menu2">grid</a></li>
+    <li><a data-toggle="tab" href="#menu2">History</a></li>
     </ul>
 
   <div class="tab-content">
@@ -73,11 +72,6 @@
         <div id="jqGridPager"></div>
         <button id="btn_save" class="btn btn-primary">Save</button>
     </div>
-    <div id="menu1" class="tab-pane fade">
-        <table id="jqGridHist"></table>
-        <div id="jqGridPagerHist"></div>
-        <button id="btn_del" class="btn btn-danger">Delete</button>
-    </div> 
     <div id="menu2" class="tab-pane fade">
         <table id="list"><tr><td></td></tr></table>
         <div id="pager"></div>
@@ -337,39 +331,8 @@ function bind() {
         });          
     });
 
-    $("#btn_del").click(function(){
-        var myGrid = $('#jqGridHist');
-        var result = [];
-        var i, selRowIds = myGrid.jqGrid("getGridParam", "selarrrow"), n, rowData;
-        for (i = 0, n = selRowIds.length; i < n; i++) {
-            let jsonObj = {};
-            rowData = myGrid.jqGrid("getLocalRow", selRowIds[i]);
-            jsonObj["tw"] = rowData.tweet;
-            result.push(jsonObj);
-        }
-
-        $.ajax({
-              url: "/deleteFromDb/"
-            , type: 'POST'
-            , dataType: 'json'
-            , data: JSON.stringify({list: result})
-            , beforeSend: function(xhr, settings) {
-                $.ajaxSettings.beforeSend(xhr, settings);
-            }
-            , success : function(data){
-                alert(data);
-                var ids = $('#jqGridHist').getGridParam('selarrrow');
-                for (  var i = ids.length-1; i>=0; i--) {
-                  $('#jqGridHist').delRowData(ids[i]);
-                }
-            }
-        });          
-    });
     $('.nav-tabs').bind('click', function (e){ 
-        if(e.target.text == 'Search History'){
-            show_hist();
-        }
-        if(e.target.text == 'grid'){
+        if(e.target.text == 'History'){
             $('#list').jqGrid("setGridParam", {datatype: 'json'});
             $('#list').jqGrid('filterToolbar',{
             // JSON stringify all data from search, including search toolbar operators
@@ -378,15 +341,6 @@ function bind() {
             searchOperators: true
             });
             $('#list').trigger( 'reloadGrid' );
-            //var result = [];
-            //var selRowIds = $('#list').getGridParam('selarrrow');
-            //var i, n, rowData;
-            //let totalScore = 0;
-            //for (i = 0, n = selRowIds.length; i < n; i++) {
-                //rowData = $('#list').jqGrid("getLocalRow", selRowIds[i]);
-                //totalScore = totalScore + rowData.score;
-            //}
-            //document.getElementById('lblAvgScore').innerHTML = 'Avg Score: ' + selRowIds.length; //totalScore/selRowIds.length;
         }
         
 
@@ -432,26 +386,6 @@ function show_list(keyword) {
                grid.jqGrid('setGridParam', { datatype: 'local', data: data }).trigger("reloadGrid");                           
             }
         });          
-}
-function show_hist() {
-        $('#jqGridHist').trigger( 'reloadGrid' );
-        
-        $("#jqGridHist").jqGrid({
-        url: "/getHist/",
-        datatype: "json",
-         colModel: [
-            { label: 'Tweet', name: 'tweet', width: 200 },
-            { label: 'Score', name: 'score', width: 100, sorttype: 'integer' }
-        ],
-        viewrecords: true, // show the current page, data rang and total records on the toolbar
-        width: 1080,
-        height: 400,
-        rowNum: 10,
-        loadonce: true, // this is just for the demo
-        navOptions: { reloadGridOptions: { fromServer: true } },
-        multiselect: true,
-        pager: "#jqGridPagerHist"
-        });
 }
 
 function csrfSafeMethod(method) {
