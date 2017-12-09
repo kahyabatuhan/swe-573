@@ -4,6 +4,58 @@
 		"selected_items":
 		[
 			[
+				"crea",
+				"create_user"
+			],
+			[
+				"colM",
+				"colModel"
+			],
+			[
+				"col",
+				"color"
+			],
+			[
+				"Twee",
+				"tweet"
+			],
+			[
+				"s",
+				"setUpTweet"
+			],
+			[
+				"all",
+				"allRecords"
+			],
+			[
+				"show",
+				"show_hist"
+			],
+			[
+				"json",
+				"json_data"
+			],
+			[
+				"js",
+				"json_data"
+			],
+			[
+				"cs",
+				"csrftoken"
+			],
+			[
+				"btn",
+				"btn-primary"
+			],
+			[
+				"onc",
+				"onclick\tAttr"
+			],
+			[
+				"ro",
+				"rowData"
+			],
+			[
 				"d",
 				"django"
 			],
@@ -27,6 +79,65 @@
 	},
 	"buffers":
 	[
+		{
+			"file": "src/my_django18_project/twtwrapper.py",
+			"settings":
+			{
+				"buffer_size": 3403,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/my_django18_project/urls.py",
+			"settings":
+			{
+				"buffer_size": 1461,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/my_django18_project/views.py",
+			"settings":
+			{
+				"buffer_size": 1535,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/profiles/test_project.py",
+			"settings":
+			{
+				"buffer_size": 3002,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/my_django18_project/settings.py",
+			"settings":
+			{
+				"buffer_size": 5510,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "Searching 252 files for \"json.loads\" (regex)\n\nC:\\.virtualenvs\\django18_project\\src\\my_django18_project\\views.py:\n   19      #keyword = request.GET[\"q\"]\n   20      #print ('Raw Data:', request.body) \n   21:     json_data = json.loads(request.body)\n   22      json_data = json_data['list']\n   23      for elm in json_data:\n   ..\n   28  @csrf_protect\n   29  def twt_delete(request): \n   30:     json_data = json.loads(request.body)\n   31      json_data = json_data['list']\n   32      for elm in json_data:\n\nC:\\.virtualenvs\\django18_project\\src\\profiles\\test_models.py:\n   52          url = reverse(\"search\")\n   53          resp = self.client.get(url + \"?q=\" + \"test\")\n   54:         data = json.loads(resp.content)\n   55          self.assertEqual(resp.status_code, 200)\n   56          #print(resp.content)\n\n3 matches across 2 files\n",
+			"settings":
+			{
+				"buffer_size": 829,
+				"line_ending": "Windows",
+				"name": "Find Results",
+				"scratch": true
+			}
+		},
+		{
+			"file": "src/static/templates/home.html",
+			"settings":
+			{
+				"buffer_size": 16519,
+				"line_ending": "Windows"
+			}
+		}
 	],
 	"build_system": "",
 	"build_system_choices":
@@ -60,18 +171,50 @@
 	},
 	"expanded_folders":
 	[
+		"/C/.virtualenvs/django18_project/src",
+		"/C/.virtualenvs/django18_project/src/controller",
 		"/C/.virtualenvs/django18_project/src/my_django18_project",
-		"/C/.virtualenvs/django18_project/src/profiles",
-		"/C/.virtualenvs/django18_project/src/static",
+		"/C/.virtualenvs/django18_project/src/static/static",
+		"/C/.virtualenvs/django18_project/src/static/static/src",
+		"/C/.virtualenvs/django18_project/src/static/static/src/css",
 		"/C/.virtualenvs/django18_project/src/static/templates",
-		"/C/.virtualenvs/django18_project/src/static/templates/registration"
+		"/C/.virtualenvs/django18_project/static"
 	],
 	"file_history":
 	[
-		"/C/.virtualenvs/django18_project/src/my_django18_project/wsgi.py",
 		"/C/.virtualenvs/django18_project/src/my_django18_project/settings.py",
-		"/C/.virtualenvs/django18_project/src/Procfile",
+		"/C/.virtualenvs/django18_project/src/profiles/records.py",
+		"/C/.virtualenvs/django18_project/src/my_django18_project/urls.py",
+		"/C/.virtualenvs/django18_project/src/static/templates/base.html",
+		"/C/.virtualenvs/django18_project/src/static/templates/home.html",
+		"/C/.virtualenvs/django18_project/src/static/templates/javascript.html",
+		"/C/.virtualenvs/django18_project/src/static/static/js/jquery.jqGrid.min.js",
+		"/C/.virtualenvs/django18_project/src/static/static/src/css/ui.jqgrid-bootstrap.css",
+		"/C/.virtualenvs/django18_project/src/my_django18_project/views.py",
+		"/C/.virtualenvs/django18_project/src/static/templates/head_css.html",
+		"/C/.virtualenvs/django18_project/src/profiles/test_models.py",
+		"/C/.virtualenvs/django18_project/src/profiles/models.py",
+		"/C/.virtualenvs/django18_project/src/my_django18_project/twtwrapper.py",
+		"/C/.virtualenvs/django18_project/src/my_django18_project/my.cnf",
+		"/C/.virtualenvs/django18_project/src/static/templates/data.json",
+		"/C/.virtualenvs/django18_project/src/profiles/admin.py",
+		"/C/.virtualenvs/django18_project/src/profiles/migrations/0008_record_owner.py",
+		"/C/.virtualenvs/django18_project/src/my_django18_project/postRecord.py",
+		"/C/.virtualenvs/django18_project/src/heroku_requirements.txt",
+		"/C/.virtualenvs/django18_project/src/controller/postRecord.py",
+		"/C/.virtualenvs/django18_project/src/profiles/__init__.py",
+		"/C/.virtualenvs/django18_project/src/static/static/src/css/ui.jqgrid.css",
+		"/C/.virtualenvs/django18_project/src/static/static/src/jquery.jqGrid.js",
+		"/C/.virtualenvs/django18_project/src/static/static/js/grid.locale-en.js",
+		"/C/.virtualenvs/django18_project/src/static/static/css/ui.jqgrid.css",
+		"/C/.virtualenvs/django18_project/src/static/static/css/jquery-ui.css",
+		"/C/.virtualenvs/django18_project/src/profiles/views.py",
 		"/C/.virtualenvs/django18_project/src/my_django18_project/settings_secret.py",
+		"/C/.virtualenvs/django18_project/src/serializer/records.py",
+		"/C/.virtualenvs/django18_project/src/Procfile",
+		"/C/.virtualenvs/django18_project/src/profiles/tests.py",
+		"/C/.virtualenvs/django18_project/src/my_django18_project/wsgi.py",
+		"/C/.virtualenvs/django18_project/src/my_django18_project/__init__.py",
 		"/C/.virtualenvs/django18_project/src/my_django18_project/s3utils.py",
 		"/C/.virtualenvs/django18_project/src/manage.py",
 		"/C/.virtualenvs/try-django-1.8/src/trydjango18/settings/production.py",
@@ -79,15 +222,11 @@
 		"/C/.virtualenvs/try-django-1.8/src/trydjango18/settings/base.py",
 		"/C/.virtualenvs/try-django-1.8/src/trydjango18/settings/__init__.py",
 		"/C/.virtualenvs/django18_project/src/profiles/forms.py",
-		"/C/.virtualenvs/django18_project/src/profiles/views.py",
 		"/C/.virtualenvs/django18_project/static/templates/registration/activation_email.txt",
 		"/C/.virtualenvs/django18_project/static/templates/home.html",
 		"/C/.virtualenvs/django18_project/static/templates/navbar.html",
-		"/C/.virtualenvs/django18_project/src/profiles/admin.py",
-		"/C/.virtualenvs/django18_project/src/profiles/models.py",
 		"/C/.virtualenvs/django18_project/static/templates/base.html",
 		"/C/.virtualenvs/django18_project/static/templates/about.html",
-		"/C/.virtualenvs/django18_project/src/my_django18_project/urls.py",
 		"/C/.virtualenvs/django18_project/static/templates/contact.html",
 		"/C/.virtualenvs/django18_project/static/static/css/main.css",
 		"/C/.virtualenvs/django18_project/static/static/css/navbar.html",
@@ -105,9 +244,12 @@
 	},
 	"find_in_files":
 	{
-		"height": 0.0,
+		"height": 90.0,
 		"where_history":
 		[
+			"<project>",
+			"<current file>",
+			""
 		]
 	},
 	"find_state":
@@ -115,6 +257,42 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"json.loads",
+			"twt_search",
+			"hist",
+			"show_hist",
+			"show_list",
+			"highlightFilteredData",
+			"postData",
+			"filters",
+			"highlight",
+			"highlightFilteredData",
+			"';",
+			"bind",
+			"loadComplete",
+			"highlightFilteredData",
+			"btn_del",
+			"                \n",
+			"menu1",
+			"jqGridHist",
+			"jqGridPagerHist",
+			"rest_framework.authtoken",
+			"rest_framework",
+			"authtoken",
+			"show_list",
+			"btn_save",
+			"home",
+			"CSRFToken",
+			"csrftoken",
+			"insertToDb",
+			"twt_save",
+			"POST",
+			"getHist",
+			"twt_hist",
+			"insertToDb",
+			"csrf_protect",
+			"crispy",
+			"dj_database_url",
 			"ALLOWED_HOSTS",
 			"^",
 			"%}\n",
@@ -136,8 +314,243 @@
 	"groups":
 	[
 		{
+			"selected": 4,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "src/my_django18_project/twtwrapper.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3403,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 315.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "src/my_django18_project/urls.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1461,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1232,
+								1232
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "src/my_django18_project/views.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1535,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								509,
+								509
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 90.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "src/profiles/test_project.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3002,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1909,
+								1909
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 180.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "src/my_django18_project/settings.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5510,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4666,
+								4666
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 2236.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 829,
+						"regions":
+						{
+							"match":
+							{
+								"flags": 112,
+								"regions":
+								[
+									[
+										222,
+										232
+									],
+									[
+										404,
+										414
+									],
+									[
+										687,
+										697
+									]
+								],
+								"scope": ""
+							}
+						},
+						"selection":
+						[
+							[
+								225,
+								225
+							]
+						],
+						"settings":
+						{
+							"detect_indentation": false,
+							"line_numbers": false,
+							"output_tag": 1,
+							"result_base_dir": "",
+							"result_file_regex": "^([^ \t].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "src/static/templates/home.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 16519,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								14273,
+								14288
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1935.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				}
 			]
 		}
 	],
@@ -218,7 +631,7 @@
 	"show_open_files": true,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 246.0,
+	"side_bar_width": 312.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{

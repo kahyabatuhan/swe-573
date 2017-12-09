@@ -1,0 +1,460 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
+
+{% block head_title %}Welcome | {{ block.super }}{% endblock %}
+
+<style>
+{% block style %}
+.navbar-static-top {
+    margin-bottom: 0px !important;
+}
+
+.jumbotron {
+    background-color:#0E3D14;
+    color: #FFF;
+}
+
+{% endblock %}
+</style>
+
+
+     
+{% block jumbotron %}
+ {% if not request.user.is_authenticated %}
+
+<div class="jumbotron">
+ <div class="container">
+    <div class="row">
+        <div class='col-sm-6'>
+        <h1>Toss a Word</h1>
+        <p>The Toss a Word project is designed to get your curiosity about a word satisfied. The goal is to show you wheather sentiment of latest tweets containing your word is pozitive or not. Join Us today.</p>
+        <p>
+        <a class="btn btn-lg btn-primary" href="{% url 'registration_register' %}" role="button">Join Us &raquo;</a>
+        </p>
+        </div>
+        
+        <div class='col-sm-6' >
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/xsz62kEDuM8" frameborder="0" allowfullscreen></iframe>
+
+        </div>
+        
+        </div>
+    </div>
+ </div>
+ {% endif %}
+{% endblock %}
+
+
+
+
+{% block content %}
+ {% if request.user.is_authenticated %}
+
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<h1>You are logged in, Let's get tweet scores!</h1>
+
+
+
+<div style="margin-left:20px">
+    
+    <ul class="nav nav-tabs">
+    <li class="active"><a data-toggle="tab" href="#home">Home</a></li>
+    <li><a data-toggle="tab" href="#menu2">History</a></li>
+    </ul>
+
+  <div class="tab-content">
+    <div id="home" class="tab-pane fade in active">
+        <input type="text" id="search_box" />
+        <button id="btn_search" class='btn btn-primary'>Toss</button>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+        <button id="btn_save" class="btn btn-primary">Save</button>
+    </div>
+    <div id="menu2" class="tab-pane fade">
+        <table id="list"><tr><td></td></tr></table>
+        <div id="pager"></div>
+        <button id="btn_del2" class="btn btn-danger">Delete</button>
+    </div> 
+
+  </div>
+</div>
+
+<script type="text/javascript">
+    //<![CDATA[
+        /*global $ */
+        /*jslint plusplus: true */
+        $(function () {
+            "use strict";
+            var $grid = $("#list"),
+                initDatepicker = function (elem) {
+                    $(elem).datepicker({
+                        dateFormat: "dd-M-yy",
+                        autoSize: true,
+                        changeYear: true,
+                        changeMonth: true,
+                        showButtonPanel: true,
+                        showWeek: true
+                    });
+                },
+                numberTemplate = {formatter: "number", align: "right", sorttype: "number",
+                    editrules: {number: true, required: true},
+                    searchoptions: { sopt: ["eq", "ne", "lt", "le", "gt", "ge", "nu", "nn", "in", "ni"] }},
+                highlightFilteredData = function () {
+                    var $self = $(this), filters, i, l, rules, rule, iCol,
+                        isFiltered = $self.jqGrid("getGridParam", "search"),
+                        postData = $self.jqGrid("getGridParam", "postData"),
+                        colModel = $self.jqGrid("getGridParam", "colModel"),
+                        colIndexByName = {};
+
+                    // validate whether we have input for highlighting
+                    if (!isFiltered || typeof postData !== "object") {
+                        return;
+                    }
+                    filters = $.parseJSON(postData.filters);
+                    if (filters == null || filters.rules == null && filters.rules.length <= 0) {
+                        return;
+                    }
+
+                    // fill colIndexByName which get easy column index by the column name
+                    for (i = 0, l = colModel.length; i < l; i++) {
+                        colIndexByName[colModel[i].name] = i;
+                    }
+
+                    rules = filters.rules;
+                    for (i = 0, l = rules.length; i < l; i++) {
+                        rule = rules[i];
+                        iCol = colIndexByName[rule.field];
+                        if (iCol !== undefined && rule.field !=="score") {
+                            $self.find(">tbody>tr.jqgrow>td:nth-child(" + (iCol + 1) + ")").highlight(rule.data);
+                        }
+                    }
+                };
+
+            $grid.jqGrid({
+                url: "/getHist/",
+                datatype: "json",
+                colModel: [
+                { 
+                    label: 'Tweet', 
+                    name: 'tweet', 
+                    width: 750, 
+                    editrules: {required: true}, 
+                    searchoptions: {
+                        sopt: ['cn', 'nc', 'bw', 'ew', 'in','ni','eq', 'ne'],
+                        defaultSearch: 'cn'
+                    },
+                    highlight: true },
+                 { 
+                    label: 'Score', 
+                    name: 'score', 
+                    width: 100, 
+                    sorttype: 'number',
+                    searchoptions: {
+                        // show search options
+                        sopt: ["ge","le","eq"],
+                        defaultSearch: 'ge'
+                    },
+                    highlight: false
+                 }
+                ],
+                width: 1080,
+                height: 400,
+                multiselect:true,
+                reloadAfterSubmit: true,
+                loadonce: true,
+                rowNum: 999999999,
+                rowList: [999999999, 10, 20, 50],
+                toolbar: [true, "top"],
+                pager: "#pager",
+                gridview: true,
+                rownumbers: true,
+                autoencode: true,
+                ignoreCase: true,
+                sortname: "invdate",
+                viewrecords: true,
+                sortorder: "desc",
+                shrinkToFit: false,
+                //height: "100%",
+                //caption: "Demonstrate how to implement searching with one collon searching field",
+                loadComplete: function () {
+                    highlightFilteredData.call(this);
+                    $("option[value=999999999]").text('All');
+                },
+                gridComplete: function() { 
+                    var colAvg = $grid.jqGrid('getCol', 'score', false, 'avg'); 
+                    var colSum = $grid.jqGrid('getCol', 'score', false, 'sum'); 
+                    var colCnt = $grid.jqGrid('getCol', 'score', false, 'count'); 
+                    //$grid.jqGrid('footerData', 'set', { score: colAvg });
+                    document.getElementById('lblAvgScore').innerHTML = 'Avg Score: ' + colAvg;
+                    document.getElementById('lblSumScore').innerHTML = 'Total Score: ' + colSum;
+                    document.getElementById('lblCntTweet').innerHTML = 'Tweet Count: ' + colCnt;
+
+                }
+            }).jqGrid("navGrid", "#pager", {add: false, edit: false, del: false, search: false});
+            // fill top toolbar
+            $('#t_' + $.jgrid.jqID($grid[0].id))
+                .append($("<div><label for=\"globalSearchText\">Search in Tweet for:&nbsp;</label><input id=\"globalSearchText\" type=\"text\"></input>&nbsp;<button id=\"globalSearch\" type=\"button\">Search</button><label id=\"lblAvgScore\" style=\"text-indent: 40px\">Avg Score:</label><label id=\"lblSumScore\" style=\"text-indent: 40px\">Sum Score:</label><label id=\"lblCntTweet\" style=\"text-indent: 40px\">Tweet Count:</label></div>"));
+            $("#globalSearchText").keypress(function (e) {
+                var key = e.charCode || e.keyCode || 0;
+                if (key === $.ui.keyCode.ENTER) { // 13
+                    $("#globalSearch").click();
+                }
+            });
+            $("#globalSearch").button({
+                icons: { primary: "ui-icon-search" },
+                text: false
+            }).click(function () {
+                var postData = $grid.jqGrid("getGridParam", "postData"),
+                    colModel = $grid.jqGrid("getGridParam", "colModel"),
+                    rules = [],
+                    searchText = $("#globalSearchText").val(),
+                    l = colModel.length,
+                    i,
+                    cm;
+                for (i = 0; i < l; i++) {
+                    cm = colModel[i];
+                    if (cm.search !== false && (cm.stype === undefined || cm.stype === "text") && cm.highlight !== false) {
+                        rules.push({
+                            field: cm.name,
+                            op: "cn",
+                            data: searchText
+                        });
+                    }
+                }
+                postData.filters = JSON.stringify({
+                    groupOp: "OR",
+                    rules: rules
+                });
+                $grid.jqGrid('filterToolbar',{
+                // JSON stringify all data from search, including search toolbar operators
+                stringResult: true,
+                // instuct the grid toolbar to show the search options
+                searchOperators: true
+                });
+                $grid.jqGrid("setGridParam", { search: true });
+                $grid.trigger("reloadGrid", [{page: 1, current: true}]);
+
+                return false;
+            });
+        });
+    //]]>
+    </script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    bind();
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+            // Send the token to same-origin, relative URLs only.
+            // Send the token only if the method warrants CSRF protection
+            // Using the CSRFToken value acquired earlier
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+ $("#jqGrid").jqGrid({
+        datatype: "json",
+         colModel: [
+            { label: 'Tweet', name: 'name', width: 200 },
+            { label: 'Score', name: 'score', width: 100, sorttype: 'number' }
+        ],
+        viewrecords: true, // show the current page, data rang and total records on the toolbar
+        width: 1080,
+        height: 400,
+        rowNum: 10,
+        loadonce: true, // this is just for the demo
+        multiselect:true,
+        pager: "#jqGridPager"
+    });
+});
+$("#search_box").keypress(function (e) {
+    var key = e.charCode || e.keyCode || 0;
+    if (key === $.ui.keyCode.ENTER) { // 13
+        $("#btn_search").click();
+    }
+});
+// using jQuery
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+var csrftoken = getCookie('csrftoken');
+
+function bind() {
+    $("#btn_search").click(function(){
+        var keyword = $("#search_box").val();
+        show_list(keyword);
+    });
+
+    $("#btn_save").click(function(){
+        var myGrid = $('#jqGrid');
+        var result = [];
+        var i, selRowIds = myGrid.jqGrid("getGridParam", "selarrrow"), n, rowData;
+        for (i = 0, n = selRowIds.length; i < n; i++) {
+            let jsonObj = {};
+            rowData = myGrid.jqGrid("getLocalRow", selRowIds[i]);
+            jsonObj["tw"] = rowData.name;
+            jsonObj["score"] = rowData.score;
+            //jsonObj["owner_id"] = {{request.user.id}};
+            result.push(jsonObj);
+        }
+
+        $.ajax({
+              url: "/insertToDb/"
+            , type: 'POST'
+            , dataType: 'json'
+            , data: JSON.stringify({list: result})
+            , beforeSend: function(xhr, settings) {
+                $.ajaxSettings.beforeSend(xhr, settings);
+            }
+            , success : function(data){
+                alert(data);
+                var ids = $('#jqGrid').getGridParam('selarrrow');
+                for (  var i = ids.length-1; i>=0; i--) {
+                  $('#jqGrid').delRowData(ids[i]);
+                }
+            }
+        });          
+    });
+
+    $('.nav-tabs').bind('click', function (e){ 
+        if(e.target.text == 'History'){
+            $('#list').jqGrid("setGridParam", {datatype: 'json'});
+            $('#list').jqGrid('filterToolbar',{
+            // JSON stringify all data from search, including search toolbar operators
+            stringResult: true,
+            // instuct the grid toolbar to show the search options
+            searchOperators: true
+            });
+            $('#list').trigger( 'reloadGrid' );
+        }
+        
+
+    });
+    $("#btn_del2").click(function(){
+        var myGrid = $('#list');
+        var result = [];
+        var i, selRowIds = myGrid.jqGrid("getGridParam", "selarrrow"), n, rowData;
+        for (i = 0, n = selRowIds.length; i < n; i++) {
+            let jsonObj = {};
+            rowData = myGrid.jqGrid("getLocalRow", selRowIds[i]);
+            jsonObj["tw"] = rowData.tweet;
+            result.push(jsonObj);
+        }
+
+        $.ajax({
+              url: "/deleteFromDb/"
+            , type: 'POST'
+            , dataType: 'json'
+            , data: JSON.stringify({list: result})
+            , beforeSend: function(xhr, settings) {
+                $.ajaxSettings.beforeSend(xhr, settings);
+            }
+            , success : function(data){
+                alert(data);
+                var ids = $('#list').getGridParam('selarrrow');
+                for (  var i = ids.length-1; i>=0; i--) {
+                  $('#list').delRowData(ids[i]);
+                }
+                //$('#list').jqGrid("setGridParam", {datatype: 'json'});
+                //$('#list').trigger( 'reloadGrid' );
+            }
+        });          
+    });
+}
+function show_list(keyword) {
+        $.ajax({
+              url: "/search/?q=" + keyword
+            , type: 'GET'
+            , dataType: 'json'
+            , success : function(data){
+               var grid=$('#jqGrid');
+               grid.jqGrid('setGridParam', { datatype: 'local', data: data }).trigger("reloadGrid");                           
+            }
+        });          
+}
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+function sameOrigin(url) {
+    // test that a given url is a same-origin URL
+    // url could be relative or scheme relative or absolute
+    var host = document.location.host; // host + port
+    var protocol = document.location.protocol;
+    var sr_origin = '//' + host;
+    var origin = protocol + sr_origin;
+    // Allow absolute or scheme relative URLs to same origin
+    return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+        (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+        // or any other URL that isn't scheme relative or absolute i.e relative.
+        !(/^(\/\/|http:|https:).*/.test(url));
+}
+</script>
+
+
+ {% else %}
+<div class="row">
+
+
+<div class='col-sm-3'>
+<p class='lead text-align-center'>Project GitHub Gate <br/><br/>
+<a href="https://github.com/kahyabatuhan/swe-573">
+<span class="fa-stack fa-lg fa-5x">
+<i class="fa fa-circle-o-notch fa-stack-2x" ></i>
+  <!-- <i class="fa fa-square-o fa-stack-2x"></i> -->
+  <i class="fa fa-github fa-stack-1x" ></i>
+</span>
+</a>
+</p>
+</div>
+
+<div class='col-sm-3'>
+<p class='lead text-align-center'>Ideas Appreciated
+<br/>
+<a href="{% url 'contact' %}">
+<span class='fa-stack fa-lg fa-5x'>
+<i class='fa fa-comment-o fa-stack-2x'></i>
+<i style='color:yellow;' class="fa fa-bolt fa-stack-1x"></i>
+</span>
+</a>
+</p>
+</div>
+
+<div class='col-sm-3'>
+<p class='lead text-align-center'>Go &amp; Tweet</p>
+<a href="https://twitter.com/?lang=en">
+<img src='{% static "img/tweeter.png" %}' class='img-responsive' />
+</a>
+</div>
+
+<div class='col-sm-3'>
+<p class='lead text-align-center'>Under Construction</p>
+<a href="{% url 'contact' %}">
+<img src='{% static "img/underconstruction.jpg" %}' class='img-responsive' />
+</a>
+</div>
+
+
+</div>
+{% endif %}
+
+{% endblock %}
+
+
+
