@@ -27,10 +27,13 @@ class TWT(object):
     @staticmethod
     def find(name):
         twitter = Twython(TWT.APP_KEY, TWT.APP_SECRET, TWT.OAUTH_TOKEN, TWT.OAUTH_TOKEN_SECRET)
-        ts = twitter.search(q=name, lang = 'en', result_type = 'recent')
+        ts = twitter.search(q=name, count=200, lang = 'en', result_type = 'recent')
         tl = []
+        s = []
         for tweet in ts['statuses']:
-            tl.append({'name': tweet['text'], 'score': scoreTweet(tweet) })
+            if tweet['text'] not in s:
+                tl.append({'name': tweet['text'], 'score': scoreTweet(tweet) })
+                s.append(tweet['text'])
         return tl
 
 #Gets the text, sans links, hashtags, mentions, media, and symbols.

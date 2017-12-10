@@ -258,13 +258,18 @@ $.ajaxSetup({
  $("#jqGrid").jqGrid({
         datatype: "json",
          colModel: [
-            { label: 'Tweet', name: 'name', width: 200 },
+            { label: 'Tweet', name: 'name', width: 759 },
             { label: 'Score', name: 'score', width: 100, sorttype: 'number' }
         ],
         viewrecords: true, // show the current page, data rang and total records on the toolbar
         width: 1080,
         height: 400,
-        rowNum: 10,
+        rowNum: 999999999,
+        rowList: [999999999, 10, 20, 50],
+        rownumbers: true,
+        loadComplete: function () {
+            $("option[value=999999999]").text('All');
+        },
         loadonce: true, // this is just for the demo
         multiselect:true,
         pager: "#jqGridPager"
@@ -322,8 +327,14 @@ function bind() {
                 $.ajaxSettings.beforeSend(xhr, settings);
             }
             , success : function(data){
-                alert(data);
                 var ids = $('#jqGrid').getGridParam('selarrrow');
+                if (ids.length===0) {
+                    alert("Please Select Rows");
+                }
+                if (ids.length!==0) {
+                    alert(data);
+                }
+                
                 for (  var i = ids.length-1; i>=0; i--) {
                   $('#jqGrid').delRowData(ids[i]);
                 }
@@ -365,8 +376,13 @@ function bind() {
                 $.ajaxSettings.beforeSend(xhr, settings);
             }
             , success : function(data){
-                alert(data);
                 var ids = $('#list').getGridParam('selarrrow');
+                if (ids.length===0) {
+                    alert("Please Select Rows");
+                }
+                if (ids.length!==0) {
+                    alert(data);
+                }
                 for (  var i = ids.length-1; i>=0; i--) {
                   $('#list').delRowData(ids[i]);
                 }
@@ -382,7 +398,9 @@ function show_list(keyword) {
             , type: 'GET'
             , dataType: 'json'
             , success : function(data){
+               alert(data.length + ' new tweets found')
                var grid=$('#jqGrid');
+               grid.jqGrid("clearGridData");
                grid.jqGrid('setGridParam', { datatype: 'local', data: data }).trigger("reloadGrid");                           
             }
         });          

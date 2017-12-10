@@ -12,7 +12,18 @@ from profiles.records import Record
 def twt_search(request):
     keyword = request.GET["q"]
     items = TWT.find(keyword)
-    return HttpResponse(json.dumps(items), content_type="application/json")
+
+    raw_data = serializers.serialize('python', Record.objects.filter(owner_id = request.user.id)) 
+    repo = []
+    for d in raw_data:
+        repo.append(d['fields']['tweet'])
+
+    refineItems = []
+    for elm in items:
+        if elm['name'] not in repo:
+            refineItems.append(elm)
+            
+    return HttpResponse(json.dumps(refineItems), content_type="application/json")
 
 @csrf_protect
 def twt_save(request):
@@ -30,7 +41,7 @@ def twt_delete(request):
     json_data = json.loads(request.body)
     json_data = json_data['list']
     for elm in json_data:
-    	rec = Record.objects.get(tweet=elm['tw'])
+    	rec = Record.objects.get(tweet=elm['tw'], owner = request.user)
     	rec.delete()
     return HttpResponse(json.dumps("Successfuly deleted"), content_type="application/json")
 
