@@ -18,7 +18,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "my_django18_project.settings")
 
 application = get_wsgi_application()
 
-if settings.DEBUG:
+if not settings.DEBUG:
 	try:
 		from dj_static import Cling
 		application = Cling(get_wsgi_application())
